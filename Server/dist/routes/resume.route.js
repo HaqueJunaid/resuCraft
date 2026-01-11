@@ -19,8 +19,8 @@ resumeRouter.get("/getResumeById/:id", async (req, res) => {
     try {
         // @ts-ignore
         let { id } = req.params;
-        let resumes = await resumeModel.findOne({ _id: id });
-        return res.status(200).json({ message: "Resumes fetched successfully", resumes });
+        let resume = await resumeModel.findOne({ _id: id });
+        return res.status(200).json({ message: "Resumes fetched successfully", resume });
     }
     catch (error) {
         console.log(error);

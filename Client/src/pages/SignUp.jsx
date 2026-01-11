@@ -1,13 +1,29 @@
 import { LockIcon, Mail, User } from "lucide-react";
-import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
-
+import { useForm } from "react-hook-form";
+import axios from "axios"
 
 const Signup = () => {
   // eslint-disable-next-line react-hooks/immutability
-  document.title = "resuCraft | Signup"
-  
+  document.title = "resuCraft | Signup";
+
+  const {
+    register,
+    handleSubmit,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    axios.post("http://localhost:8080/api/auth/signup", {fullName: data.name, email: data.email, password: data.password})
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="w-full relative h-screen flex items-center justify-center">
       <div className="absolute top-5 left-5 lg:top-10 lg:left-10">
@@ -15,7 +31,10 @@ const Signup = () => {
       </div>
       <div className="flex h-screen w-full">
         <div className="w-full flex flex-col items-center justify-center">
-          <form className="md:w-96 w-80 flex flex-col items-center justify-center">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="md:w-96 w-80 flex flex-col items-center justify-center"
+          >
             <h2 className="text-4xl text-green-500 font-medium">Sign up</h2>
             <p className="text-sm text-neutral-300/90 mt-3">
               Welcome! Create a new account
@@ -45,7 +64,7 @@ const Signup = () => {
                 type="text"
                 placeholder="Name"
                 className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                required
+                {...register("name")}
               />
             </div>
 
@@ -55,33 +74,36 @@ const Signup = () => {
                 type="email"
                 placeholder="Email id"
                 className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                required
+                {...register("email")}
               />
             </div>
 
-              <div className="flex items-center mt-6 w-full bg-transparent border border-neutral-500/20 h-12 rounded-full overflow-hidden pl-6 gap-2">
-                <LockIcon size={20} className="text-green-500" />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                  required
-                />
-              </div>
+            <div className="flex items-center mt-6 w-full bg-transparent border border-neutral-500/20 h-12 rounded-full overflow-hidden pl-6 gap-2">
+              <LockIcon size={20} className="text-green-500" />
+              <input
+                type="password"
+                placeholder="Password"
+                className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
+                {...register("password")}
+              />
+            </div>
 
-            <button
+            <input
               type="submit"
               className="mt-8 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity"
-            >
-              Login
-            </button>
-            <p className="text-neutral-500/90 text-sm mt-4">
-              Already have account?{" "}
-              <Link to={"/login"} className="relative z-10 text-green-500 hover:underline">
-                Log in
-              </Link>
-            </p>
+              value={"Sign up"}
+            />
           </form>
+
+          <p className="text-neutral-500/90 text-sm mt-4">
+            Already have account?{" "}
+            <Link
+              to={"/login"}
+              className="relative z-10 text-green-500 hover:underline"
+            >
+              Log in
+            </Link>
+          </p>
         </div>
         <div className="w-full overflow-hidden hidden md:inline-block">
           <img

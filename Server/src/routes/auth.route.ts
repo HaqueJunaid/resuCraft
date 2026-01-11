@@ -14,6 +14,8 @@ authRouter.post("/signup", async (req, res) => {
             return res.status(400).json({ error: "All fields are required", message: "" });
         }
 
+        console.log(fullName, email, password);
+
         const isExists = await userModel.findOne({ email });
         if (isExists) {
             return res.status(400).json({ error: "User already exists", message: "" });
