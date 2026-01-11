@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/config/db.ts","./src/models/user.model.ts","./src/routes/auth.route.ts","./src/utils/emails.ts","./src/utils/signjwt.ts"],"version":"5.9.3"}
