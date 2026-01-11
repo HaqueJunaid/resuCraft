@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/config/db.ts","./src/models/user.model.ts","./src/routes/auth.route.ts","./src/utils/emails.ts","./src/utils/signjwt.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/config/db.ts","./src/middlewares/auth.ts","./src/models/resume.model.ts","./src/models/user.model.ts","./src/routes/auth.route.ts","./src/routes/resume.route.ts","./src/utils/emails.ts","./src/utils/signjwt.ts"],"version":"5.9.3"}
