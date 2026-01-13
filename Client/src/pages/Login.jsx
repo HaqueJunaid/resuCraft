@@ -1,12 +1,35 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import { Lock, Mail } from "lucide-react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
+  const navigator = useNavigate();
   // eslint-disable-next-line react-hooks/immutability
   document.title = "resuCraft | Login"
+
+  const {
+    register,
+    handleSubmit,
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    console.log(data);
+    axios.post("http://localhost:8080/api/auth/signin", { email: data.email, password: data.password})
+      .then((res) => {
+        console.log(res);
+        toast.success("Login successful");
+        navigator("/app");
+      })
+      .catch((error) => {
+        console.log(error.response.data.error);
+        toast.error("Failed to login");
+      });
+  };
   
   return (
     <div className="w-full h-screen flex items-center justify-center">
@@ -23,7 +46,7 @@ const Login = () => {
         </div>
 
         <div className="w-full flex flex-col items-center justify-center">
-          <form className="md:w-96 w-80 flex flex-col items-center justify-center">
+          <form onSubmit={handleSubmit(onSubmit)} className="md:w-96 w-80 flex flex-col items-center justify-center">
             <h2 className="text-4xl text-green-500 font-medium">Sign in</h2>
             <p className="text-sm text-neutral-300/90 mt-3">
               Welcome back! Please sign in to continue
@@ -54,6 +77,7 @@ const Login = () => {
                 placeholder="Email id"
                 className="bg-transparent text-neutral-300/80 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
                 required
+                {...register("email")}
               />
             </div>
 
@@ -71,16 +95,16 @@ const Login = () => {
                   placeholder="Password"
                   className="bg-transparent text-neutral-300/80 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
                   required
+                  {...register("password")}
                 />
               </div>
             </div>
 
-            <button
+            <input
               type="submit"
               className="mt-8 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity"
-            >
-              Login
-            </button>
+              value="Login"
+            />
             <p className="text-neutral-500/90 text-sm mt-4">
               Don’t have an account?{" "}
               <Link to={"/signup"} className="relative z-10 text-green-500 hover:underline">
