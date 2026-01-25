@@ -1,7 +1,6 @@
 import { FilePenLine, Pencil, Plus, Trash, Upload, XIcon } from "lucide-react";
 import { dummyResumeData } from "../assets/assets";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigator = useNavigate();
@@ -31,11 +30,6 @@ const Dashboard = () => {
     document.title = "resuCraft | Dashboard"
     setAllResumes(dummyResumeData);
   };
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    loadAllResumes();
-  }, []);
 
   return (
     <div className="w-3/4 mx-auto min-h-screen pt-30 px-6 pb-10 text-neutral-100">

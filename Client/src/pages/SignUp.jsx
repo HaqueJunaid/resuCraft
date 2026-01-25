@@ -2,8 +2,6 @@ import { LockIcon, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import { useForm } from "react-hook-form";
-import axios from "axios"
-import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -18,16 +16,6 @@ const Signup = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    axios.post("http://localhost:8080/api/auth/signup", {fullName: data.name, email: data.email, password: data.password})
-      .then((res) => {
-        console.log(res.data.error);
-        toast.success("Account created successfully! Please verify your email");
-        navigate("/otp-verification");
-      })
-      .catch((error) => {
-        console.log(error.response.data.error);
-        toast.error("Failed to create account");
-      });
   };
 
   return (
