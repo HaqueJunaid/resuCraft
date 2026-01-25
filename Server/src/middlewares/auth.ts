@@ -9,7 +9,7 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
         }
 
         // @ts-ignore
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET || 'default_secret');
         // @ts-ignore
         req.user = decodedToken;
         next();

@@ -137,14 +137,15 @@ authRouter.post("/reset-password", async (req, res) => {
 });
 // Refresh Token
 authRouter.post('/refresh', async (req, res) => {
-    const authorization = req.headers.authorization?.split(' ')[1];
-    if (!authorization)
+    const headerToken = req.headers.authorization?.split(' ')[1];
+    if (!headerToken)
         return res.status(401).json({ message: "No refresh token" });
-    console.log({ authorization });
-    await jwt.verify(authorization, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+    const refreshSecret = process.env.REFRESH_TOKEN_SECRET || 'default_refresh_secret';
+    const accessSecret = process.env.ACCESS_TOKEN_SECRET || 'default_secret';
+    jwt.verify(headerToken, accessSecret, (err, decoded) => {
         if (err)
             return res.status(403).json({ message: "Invalid refresh token" });
-        const accessToken = jwt.sign({ id: decoded.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+        const { accessToken } = signJWT(decoded.id);
         res.json({ accessToken });
     });
 });

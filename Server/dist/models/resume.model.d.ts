@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 export declare const resumeModel: mongoose.Model<{
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -68,13 +67,13 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
 } & mongoose.DefaultTimestampProps, {}, {}, {
     id: string;
 }, mongoose.Document<unknown, {}, {
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -142,6 +141,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
@@ -150,7 +150,6 @@ export declare const resumeModel: mongoose.Model<{
 }, {
     timestamps: true;
 }> & Omit<{
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -218,6 +217,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
@@ -230,7 +230,6 @@ export declare const resumeModel: mongoose.Model<{
 }, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, {
     timestamps: true;
 }, {
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -298,11 +297,11 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
 } & mongoose.DefaultTimestampProps, mongoose.Document<unknown, {}, {
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -370,6 +369,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
@@ -378,7 +378,6 @@ export declare const resumeModel: mongoose.Model<{
 }, mongoose.ResolveSchemaOptions<{
     timestamps: true;
 }>> & Omit<{
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -446,6 +445,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
@@ -459,7 +459,6 @@ export declare const resumeModel: mongoose.Model<{
     [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
 } | {
     [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        public: boolean;
         userId: mongoose.Types.ObjectId;
         title: string;
         personal_info: {
@@ -527,6 +526,7 @@ export declare const resumeModel: mongoose.Model<{
             name?: string | null;
             description?: string | null;
         }>;
+        public: boolean;
         template: string;
         accent_color: string;
         professional_summary?: string | null;
@@ -535,7 +535,6 @@ export declare const resumeModel: mongoose.Model<{
     }, mongoose.ResolveSchemaOptions<{
         timestamps: true;
     }>> & Omit<{
-        public: boolean;
         userId: mongoose.Types.ObjectId;
         title: string;
         personal_info: {
@@ -603,6 +602,7 @@ export declare const resumeModel: mongoose.Model<{
             name?: string | null;
             description?: string | null;
         }>;
+        public: boolean;
         template: string;
         accent_color: string;
         professional_summary?: string | null;
@@ -614,7 +614,6 @@ export declare const resumeModel: mongoose.Model<{
         id: string;
     }> | undefined;
 }, {
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -682,6 +681,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
@@ -692,7 +692,6 @@ export declare const resumeModel: mongoose.Model<{
 } & {
     __v: number;
 }>, {
-    public: boolean;
     userId: mongoose.Types.ObjectId;
     title: string;
     personal_info: {
@@ -760,6 +759,7 @@ export declare const resumeModel: mongoose.Model<{
         name?: string | null;
         description?: string | null;
     }>;
+    public: boolean;
     template: string;
     accent_color: string;
     professional_summary?: string | null;
