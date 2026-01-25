@@ -3,6 +3,7 @@ import { userModel } from "../models/user.model.js";
 import { signJWT } from "../utils/signJWT.js";
 import { sendForgotPasswordEmail, sendVerificationEmail } from "../utils/emails.js";
 import otpGenerator from "otp-generator";
+import jwt from "jsonwebtoken";
 const authRouter = Router();
 // Signup endpoint
 authRouter.post("/signup", async (req, res) => {
@@ -50,8 +51,9 @@ authRouter.post("/signin", async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
-        let token = signJWT(user._id.toString());
-        return res.status(200).json({ message: "Signin successful", token });
+        let { accessToken, refreshToken } = signJWT(user._id.toString());
+        res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 1000 * 60 * 15 });
+        return res.status(200).json({ message: "Signin successful", accessToken });
     }
     catch (error) {
         let e = error;
@@ -75,8 +77,9 @@ authRouter.post("/verify-otp", async (req, res) => {
         user.isVerified = true;
         user.verificationOtp = "";
         await user.save();
-        let token = signJWT(user._id.toString());
-        return res.status(200).json({ message: "Otp verified successfully", token });
+        let { accessToken, refreshToken } = signJWT(user._id.toString());
+        res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: true, sameSite: "none", maxAge: 1000 * 60 * 15 });
+        return res.status(200).json({ message: "Otp verified successfully", accessToken });
     }
     catch (error) {
         let e = error;
@@ -131,6 +134,19 @@ authRouter.post("/reset-password", async (req, res) => {
         let e = error;
         res.status(500).json({ error: e.message, message: "Something went wrong" });
     }
+});
+// Refresh Token
+authRouter.post('/refresh', async (req, res) => {
+    const authorization = req.headers.authorization?.split(' ')[1];
+    if (!authorization)
+        return res.status(401).json({ message: "No refresh token" });
+    console.log({ authorization });
+    await jwt.verify(authorization, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+        if (err)
+            return res.status(403).json({ message: "Invalid refresh token" });
+        const accessToken = jwt.sign({ id: decoded.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
+        res.json({ accessToken });
+    });
 });
 export default authRouter;
 //# sourceMappingURL=auth.route.js.map
