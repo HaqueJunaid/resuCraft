@@ -1,6 +1,7 @@
 import { FilePenLine, Pencil, Plus, Trash, Upload, XIcon } from "lucide-react";
 import { dummyResumeData } from "../assets/assets";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigator = useNavigate();

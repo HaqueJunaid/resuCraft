@@ -3,9 +3,13 @@ import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import {toast} from "react-toastify";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line react-hooks/immutability
   document.title = "resuCraft | Signup";
 
@@ -14,8 +18,22 @@ const Signup = () => {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (formData) => {
+    setIsLoading(true);
+    console.log(formData)
+    try {
+      let res = await axios.post("http://localhost:8080/api/auth/signup", formData);
+      console.log(res.data.message);
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        navigate("/otp-verification");
+      }
+    } catch (error) {
+      console.error(error.response.data.error);
+      toast.error(error.response.data.error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -58,7 +76,8 @@ const Signup = () => {
                 type="text"
                 placeholder="Name"
                 className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                {...register("name")}
+                {...register("fullName", { required: "Name is required" })}
+                required
               />
             </div>
 
@@ -68,24 +87,27 @@ const Signup = () => {
                 type="email"
                 placeholder="Email id"
                 className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                {...register("email")}
+                {...register("email", { required: "Email is required" })}
+                required
               />
             </div>
 
             <div className="flex items-center mt-6 w-full bg-transparent border border-neutral-500/20 h-12 rounded-full overflow-hidden pl-6 gap-2">
               <LockIcon size={20} className="text-green-500" />
               <input
+              required
                 type="password"
                 placeholder="Password"
                 className="bg-transparent text-neutral-200/90 placeholder-neutral-500/80 outline-none text-sm w-full h-full"
-                {...register("password")}
+                {...register("password", { required: "Password is required" })}
               />
             </div>
 
             <input
               type="submit"
-              className="mt-8 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity"
-              value={"Sign up"}
+              className="mt-8 w-full h-11 rounded-full text-white bg-green-500 hover:opacity-90 transition-opacity disabled:opacity-50"
+              value={isLoading ? "Signing up..." : "Sign up"}
+              disabled={isLoading}
             />
           </form>
 
