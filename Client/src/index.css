@@ -26,11 +26,12 @@ body {
   link {
     @apply cursor-pointer
   }
+
   button {
     @apply cursor-pointer
   }
 }
 
 input[type="checkbox"] {
-    @apply accent-green-500 border-none outline-none
+  @apply accent-green-500 border-none outline-none
 }

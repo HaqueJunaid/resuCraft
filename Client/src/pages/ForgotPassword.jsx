@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
-import { Lock, Mail } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-const Login = () => {
-  const navigate = useNavigate();
-  document.title = "resuCraft | Login";
+const ForgotPassword = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  document.title = "resuCraft | Forgot Password";
 
   const {
     register,
@@ -14,9 +15,17 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("Login data:", data);
-    // Redirect to dashboard for demo / flow
-    navigate("/app");
+    setIsLoading(true);
+    console.log("Reset password request:", data);
+    try {
+      // Simulate sending reset link
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success("Password reset link sent to your email!");
+    } catch (error) {
+      toast.error("Failed to send reset link. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -104,7 +113,7 @@ const Login = () => {
               </div>
 
               {/* Card 2: ATS Checker Card (Overlay Top-Right) */}
-              <div className="absolute top-2 -right-4 w-37.5 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
+              <div className="absolute top-2 -right-4 w-150 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
                 <div className="w-12 h-12 rounded-full border-4 border-green-500/20 border-t-green-400 flex items-center justify-center mb-2 animate-spin" style={{ animationDuration: '4s' }}>
                   <span className="text-xs font-bold text-neutral-100 font-mono">98%</span>
                 </div>
@@ -139,40 +148,22 @@ const Login = () => {
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 md:p-12">
           <div className="w-full max-w-md bg-neutral-900/30 md:bg-transparent p-6 md:p-0 rounded-2xl border border-neutral-800/50 md:border-none backdrop-blur-md md:backdrop-blur-none">
             <div className="text-center md:text-left mb-8">
-              <h2 className="text-3xl font-extrabold text-neutral-100 tracking-tight">Sign in</h2>
+              <Link to="/login" className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-green-400 font-medium transition-colors mb-4 group cursor-pointer">
+                <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
+                Back to sign in
+              </Link>
+              <h2 className="text-3xl font-extrabold text-neutral-100 tracking-tight mt-1">Forgot Password</h2>
               <p className="text-sm text-neutral-400 mt-2">
-                Welcome back! Please sign in to access your dashboard
+                Enter your email address and we'll send you a link to reset your password.
               </p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Google Button */}
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-3 bg-neutral-900 hover:bg-neutral-800 text-neutral-200 h-12 px-4 rounded-xl border border-neutral-800 hover:border-neutral-700/80 transition-all duration-300 font-medium text-sm cursor-pointer shadow-sm active:scale-[0.99]"
-              >
-                Continue with
-                <img
-                  src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/login/googleLogo.svg"
-                  alt="googleLogo"
-                  className="size-18"
-                />
-              </button>
-
-              {/* Divider */}
-              <div className="flex items-center gap-4 w-full py-2">
-                <div className="flex-1 h-px bg-neutral-800/80"></div>
-                <span className="text-[11px] text-neutral-500 uppercase tracking-widest font-semibold">
-                  or login with email
-                </span>
-                <div className="flex-1 h-px bg-neutral-800/80"></div>
-              </div>
-
               {/* Email Input */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-neutral-400 block pl-1">Email Address</label>
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
-                  <Mail size={18} className="text-neutral-500 transition-colors" />
+                  <Mail size={18} className="text-neutral-500" />
                   <input
                     type="email"
                     placeholder="name@example.com"
@@ -183,44 +174,15 @@ const Login = () => {
                 </div>
               </div>
 
-              {/* Password Input */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between items-center pl-1">
-                  <label className="text-xs font-semibold text-neutral-400 block">Password</label>
-                  <Link
-                    className="text-xs text-green-500 hover:text-green-400 font-medium hover:underline transition-colors"
-                    to="/forgot-password"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
-                <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
-                  <Lock size={18} className="text-neutral-500 transition-colors" />
-                  <input
-                    type="password"
-                    placeholder="••••••••"
-                    className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
-                    required
-                    {...register("password")}
-                  />
-                </div>
-              </div>
-
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20"
+                className="w-full h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50"
+                disabled={isLoading}
               >
-                Log In
+                {isLoading ? "Sending Link..." : "Send Reset Link"}
               </button>
             </form>
-
-            <p className="text-neutral-500 text-sm mt-6 text-center md:text-left">
-              Don’t have an account?{" "}
-              <Link to="/signup" className="text-green-500 hover:text-green-400 font-semibold transition-colors hover:underline">
-                Sign up
-              </Link>
-            </p>
           </div>
         </div>
 
@@ -229,4 +191,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

@@ -9,6 +9,7 @@ import ResumeBuilder from "./pages/ResumeBuilder";
 import ResumeView from "./pages/ResumeView";
 import { Bounce, ToastContainer } from "react-toastify";
 import OtpVerification from "./pages/OtpVerification";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/otp-verification" element={<OtpVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

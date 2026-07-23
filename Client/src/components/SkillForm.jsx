@@ -1,12 +1,13 @@
 import { Briefcase, PlusIcon, StarIcon, StarsIcon, Trash2, XIcon } from "lucide-react";
 import { useRef } from "react";
+import { toast } from "react-toastify";
 
 const SkillForm = ({ data, onChange }) => {
   const ref = useRef(null);
 
   const addProject = (event) => {
     if (ref.current.value === "") {
-      return alert("Empty skill can't be added");
+      return toast.error("Empty skill can't be added");
     } else {
       const exists = data.find((d) => d === ref.current.value);
       if (!exists) {
