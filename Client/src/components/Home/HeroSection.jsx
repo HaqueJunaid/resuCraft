@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../Logo";
 import { Sparkles, FileText, CheckCircle2 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 
 const HeroSection = () => {
   document.title = "resuCraft";
@@ -40,19 +39,6 @@ const HeroSection = () => {
         block: "start",
       });
     }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
   };
 
   return (
@@ -139,165 +125,114 @@ const HeroSection = () => {
           </button>
         </nav>
 
-        {/* Mobile Navigation Backdrop */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[98] md:hidden pointer-events-auto"
-              onClick={closeNavbar}
-            />
-          )}
-        </AnimatePresence>
-
         {/* Mobile Navigation Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div 
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-              className="fixed border-r border-green-500/10 left-0 top-0 bg-neutral-950/95 backdrop-blur-2xl z-[99] w-[75%] sm:w-2/3 h-screen py-8 px-6 overflow-y-auto flex flex-col justify-between shadow-2xl md:hidden"
-            >
-              <div className="flex flex-col gap-6">
-                <div className="mb-4">
-                  <Logo />
-                </div>
-                {navLinks.map((nav, index) => (
-                  <motion.a
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + index * 0.1 }}
-                    key={index}
-                    href={nav.path}
-                    onClick={(e) => handleNavClick(e, nav.path, nav.label)}
-                    className="text-neutral-300 hover:text-green-400 transition-colors duration-300 text-lg font-semibold"
-                  >
-                    {nav.label}
-                  </motion.a>
-                ))}
+        {isOpen && (
+          <div className="fixed border-r border-green-500/10 left-0 top-0 bg-neutral-950/95 backdrop-blur-2xl z-99 w-2/3 h-screen py-8 px-6 overflow-hidden flex flex-col justify-between shadow-2xl">
+            <div className="flex flex-col gap-6">
+              <div className="mb-4">
+                <Logo />
               </div>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-col gap-3"
-              >
-                <Link
-                  to="/login"
-                  className="bg-transparent border border-neutral-800 text-center text-neutral-300 hover:text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition"
+              {navLinks.map((nav, index) => (
+                <a
+                  key={index}
+                  href={nav.path}
+                  onClick={(e) => handleNavClick(e, nav.path, nav.label)}
+                  className="text-neutral-300 hover:text-green-400 transition-colors duration-300 text-lg font-semibold"
                 >
-                  Log In
-                </Link>
-                <Link
-                  to="/signup"
-                  className="bg-green-500 text-center text-neutral-950 px-4 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-green-500/10 hover:bg-green-400 transition"
-                >
-                  Sign Up
-                </Link>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Main Content Animation Wrapper */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="show"
-          className="flex flex-col items-center w-full z-10"
-        >
-          {/* Trust badge */}
-          <motion.div variants={itemVariants} className="flex flex-wrap items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-green-500/20 bg-green-500/10 backdrop-blur-sm text-xs text-green-400 font-medium px-4 shadow-[0_0_15px_rgba(34,197,94,0.05)] transition-all hover:bg-green-500/15">
-            <div className="hidden md:flex items-center mr-2">
-              <img
-                className="size-6 rounded-full border border-neutral-900 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=50"
-                alt="userImage1"
-              />
-              <img
-                className="size-6 rounded-full border border-neutral-900 -translate-x-1.5 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=50"
-                alt="userImage2"
-              />
-              <img
-                className="size-6 rounded-full border border-neutral-900 -translate-x-3 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
-                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=50&h=50&auto=format&fit=crop"
-                alt="userImage3"
-              />
+                  {nav.label}
+                </a>
+              ))}
             </div>
-            <span className="-translate-x-1.5 text-[11px] flex items-center gap-1.5"><CheckCircle2 className="size-3 text-green-400" /> Join thousands building standout resumes</span>
-          </motion.div>
-
-          {/* Main Heading Text */}
-          <motion.h1 variants={itemVariants} className="text-[2.5rem] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[5rem] text-center font-extrabold tracking-tight max-w-5xl mt-8 bg-linear-to-b from-white via-neutral-100 to-neutral-400 text-transparent bg-clip-text">
-            Build Professional{" "}
-            <span className="relative inline-block text-transparent bg-clip-text bg-linear-to-r from-green-400 via-emerald-500 to-teal-500 pb-2">
-              Resume
-              <svg className="absolute w-full h-3 -bottom-1 left-0 text-green-500/60" viewBox="0 0 100 10" preserveAspectRatio="none">
-                <motion.path 
-                  d="M0 5 Q 50 10 100 5" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  fill="transparent" 
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
-                />
-              </svg>
-            </span>{" "}
-            with AI
-          </motion.h1>
-
-          <motion.p variants={itemVariants} className="text-neutral-400 text-sm sm:text-base md:text-lg max-md:px-4 text-center max-w-2xl mt-6 leading-relaxed">
-            Craft standout, standard-compliant resumes in minutes with AI-powered suggestions, live analytics, and pixel-perfect layouts.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 mt-8 md:mt-10 text-sm w-[90%] sm:w-auto">
-            <Link
-              to="/app"
-              className="w-full sm:w-auto flex justify-center group relative px-8 py-3.5 bg-linear-to-r from-green-500 to-emerald-600 text-neutral-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:shadow-[0_0_35px_rgba(34,197,94,0.4)] active:scale-[0.97] overflow-hidden"
-            >
-              <span className="relative z-10 flex items-center gap-2">Get Started Free <Sparkles className="size-4" /></span>
-              <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></div>
-            </Link>
-            <a
-              href="#features"
-              onClick={(e) => handleNavClick(e, "#features", "Features")}
-              className="w-full sm:w-auto flex justify-center items-center gap-2 bg-neutral-900/80 backdrop-blur hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700/80 hover:border-neutral-600 rounded-full px-8 py-3.5 transition duration-300"
-            >
-              <span>Learn More</span>
-              <svg
-                className="mt-0.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:translate-x-1"
-                width="6"
-                height="8"
-                viewBox="0 0 6 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="flex flex-col gap-3">
+              <Link
+                to="/login"
+                className="bg-transparent border border-neutral-800 text-center text-neutral-300 hover:text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition"
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-green-500 text-center text-neutral-950 px-4 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-green-500/10 hover:bg-green-400 transition"
               >
-                <path
-                  d="M1.25.5 4.75 4l-3.5 3.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-          </motion.div>
-        </motion.div>
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Trust badge */}
+        <div className="flex flex-wrap items-center justify-center p-1.5 mt-24 md:mt-28 rounded-full border border-green-500/20 bg-green-500/10 backdrop-blur-sm text-xs text-green-400 font-medium px-4 shadow-[0_0_15px_rgba(34,197,94,0.05)] relative z-10 transition-all hover:bg-green-500/15">
+          <div className="flex items-center mr-2">
+            <img
+              className="size-6 rounded-full border border-neutral-900 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
+              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=50"
+              alt="userImage1"
+            />
+            <img
+              className="size-6 rounded-full border border-neutral-900 -translate-x-1.5 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
+              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=50"
+              alt="userImage2"
+            />
+            <img
+              className="size-6 rounded-full border border-neutral-900 -translate-x-3 hover:z-10 hover:-translate-y-0.5 transition-all ease-in-out duration-300"
+              src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=50&h=50&auto=format&fit=crop"
+              alt="userImage3"
+            />
+          </div>
+          <span className="-translate-x-1.5 text-[11px] flex items-center gap-1.5"><CheckCircle2 className="size-3 text-green-400" /> Join thousands building standout resumes</span>
+        </div>
+
+        {/* Main Heading Text */}
+        <h1 className="text-[2.5rem] leading-[1.1] sm:text-5xl md:text-7xl lg:text-[5rem] text-center font-extrabold tracking-tight max-w-5xl mt-8 bg-linear-to-b from-white via-neutral-100 to-neutral-400 text-transparent bg-clip-text z-10">
+          Build Professional{" "}
+          <span className="relative inline-block text-transparent bg-clip-text bg-linear-to-r from-green-400 via-emerald-500 to-teal-500 pb-2">
+            Resume
+            <svg className="absolute w-full h-3 -bottom-1 left-0 text-green-500/60" viewBox="0 0 100 10" preserveAspectRatio="none">
+              <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="2" fill="transparent" />
+            </svg>
+          </span>{" "}
+          with AI
+        </h1>
+
+        <p className="text-neutral-400 text-sm sm:text-base md:text-lg max-md:px-4 text-center max-w-2xl mt-6 leading-relaxed z-10">
+          Craft standout, standard-compliant resumes in minutes with AI-powered suggestions, live analytics, and pixel-perfect layouts.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 mt-8 md:mt-10 text-sm z-10 w-[90%] sm:w-auto">
+          <Link
+            to="/app"
+            className="w-full sm:w-auto flex justify-center group relative px-8 py-3.5 bg-linear-to-r from-green-500 to-emerald-600 text-neutral-950 font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:shadow-[0_0_35px_rgba(34,197,94,0.4)] active:scale-[0.97] overflow-hidden"
+          >
+            <span className="relative z-10 flex items-center gap-2">Get Started Free <Sparkles className="size-4" /></span>
+            <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out"></div>
+          </Link>
+          <a
+            href="#features"
+            onClick={(e) => handleNavClick(e, "#features", "Features")}
+            className="w-full sm:w-auto flex justify-center items-center gap-2 bg-neutral-900/80 backdrop-blur hover:bg-neutral-800 text-neutral-300 hover:text-white border border-neutral-700/80 hover:border-neutral-600 rounded-full px-8 py-3.5 transition duration-300"
+          >
+            <span>Learn More</span>
+            <svg
+              className="mt-0.5 opacity-60 group-hover:opacity-100 transition-opacity group-hover:translate-x-1"
+              width="6"
+              height="8"
+              viewBox="0 0 6 8"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1.25.5 4.75 4l-3.5 3.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
+        </div>
 
         {/* Interactive App Window Preview (replaces static image) */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8, type: "spring", bounce: 0.3 }}
-          className="relative mt-16 md:mt-24 w-[98%] sm:w-[90%] md:w-[85%] lg:w-[70%] z-10"
-        >
+        <div className="relative mt-16 md:mt-24 w-[98%] sm:w-[90%] md:w-[85%] lg:w-[70%] z-10">
           
           {/* Floating Badges */}
           <div className="absolute -top-6 -right-2 sm:-right-6 lg:-right-12 px-3 sm:px-4 py-2 sm:py-2.5 bg-neutral-900/90 backdrop-blur-md border border-green-500/40 rounded-full flex items-center gap-2 sm:gap-2.5 anim-subtle-bounce shadow-xl z-20 scale-90 sm:scale-100 origin-bottom-right" style={{animationDelay: '1s'}}>
@@ -417,7 +352,7 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <div className="w-full h-32 bg-linear-to-t from-black via-black/80 to-transparent absolute bottom-0 z-20"></div>
       </section>

@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { Sparkles, Eye, Palette, Check, Wand2, FileText } from "lucide-react";
 import Badge from "./Badge";
-// eslint-disable-next-line no-unused-vars
-import { motion } from "motion/react";
 
 const FeatureSection = () => {
   // AI Bullet Enhancer State
@@ -50,13 +48,7 @@ const FeatureSection = () => {
 
       <div className="max-w-5xl mx-auto px-4">
         {/* Section Header */}
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-center mb-16 text-center"
-        >
+        <div className="flex flex-col items-center mb-16 text-center">
           <Badge text="AI-powered features" />
           <h2 className="text-transparent bg-linear-to-r bg-clip-text from-neutral-200 via-neutral-100 to-neutral-400 mt-4 text-3xl md:text-5xl font-bold max-w-2xl tracking-tight leading-tight">
             Build Your Standout Resume with Next-Gen Features
@@ -64,27 +56,13 @@ const FeatureSection = () => {
           <p className="text-sm md:text-base text-neutral-400 max-w-xl leading-relaxed mt-4">
             Explore advanced tools designed to make your resume shine—powered by the latest ATS insights and AI technologies.
           </p>
-        </motion.div>
+        </div>
 
         {/* Bento Grid */}
-        <motion.div 
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.15
-              }
-            }
-          }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Card 1: AI Bullet Enhancer (Spans 2 cols) */}
-          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.01 }} className="md:col-span-2 group relative border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
+          <div className="md:col-span-2 group relative border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2.5 bg-green-950/50 rounded-lg text-green-400 border border-green-800/30">
@@ -149,10 +127,10 @@ const FeatureSection = () => {
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 2: Live Preview (Spans 1 col) */}
-          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.02 }} className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
+          <div className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
@@ -187,10 +165,10 @@ const FeatureSection = () => {
                 <div className="h-2 bg-neutral-800/80 rounded-full w-2/3"></div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 3: ATS Optimization (Spans 1 col) */}
-          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.02 }} className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
+          <div className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
@@ -237,10 +215,10 @@ const FeatureSection = () => {
                 }
               `}</style>
             </div>
-          </motion.div>
+          </div>
 
           {/* Card 4: Pixel-Perfect Customizer (Spans 2 cols) */}
-          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.01 }} className="md:col-span-2 group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
+          <div className="md:col-span-2 group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
@@ -335,9 +313,9 @@ const FeatureSection = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
           
-        </motion.div>
+        </div>
       </div>
     </div>
   );
