@@ -147,6 +147,7 @@ const HeroSection = () => {
               <Link
                 to="/login"
                 className="bg-transparent border border-neutral-800 text-center text-neutral-300 hover:text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition"
+              >
                 Log In
               </Link>
               <Link
