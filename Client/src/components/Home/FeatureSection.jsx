@@ -1,127 +1,347 @@
-import { Zap } from "lucide-react";
+import { useState } from "react";
+import { Sparkles, Eye, Palette, Check, Wand2, FileText } from "lucide-react";
 import Badge from "./Badge";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 
 const FeatureSection = () => {
+  // AI Bullet Enhancer State
+  const [aiTextState, setAiTextState] = useState("idle"); // 'idle', 'optimizing', 'completed'
+  const [typedText, setTypedText] = useState("Wrote JavaScript code for client website.");
+
+  const handleAiOptimize = () => {
+    if (aiTextState !== "idle") return;
+    setAiTextState("optimizing");
+    
+    // Simulate AI loading/thinking
+    setTimeout(() => {
+      setAiTextState("completed");
+      setTypedText("Architected high-performance React client dashboards, elevating user engagement by 42% and trimming load times by 1.4 seconds.");
+    }, 1500);
+  };
+
+  const handleAiReset = () => {
+    setAiTextState("idle");
+    setTypedText("Wrote JavaScript code for client website.");
+  };
+
+  // Pixel-Perfect Style Customizer State
+  const [accentColor, setAccentColor] = useState("emerald"); // emerald, sky, violet, rose
+  const [fontFamily, setFontFamily] = useState("sans"); // sans, serif, mono
+
+  // Color mappings
+  const colorMap = {
+    emerald: { text: "text-emerald-400", bg: "bg-emerald-500", border: "border-emerald-500/40", glow: "shadow-[0_0_15px_rgba(16,185,129,0.15)]" },
+    sky: { text: "text-sky-400", bg: "bg-sky-500", border: "border-sky-500/40", glow: "shadow-[0_0_15px_rgba(14,165,233,0.15)]" },
+    violet: { text: "text-violet-400", bg: "bg-violet-500", border: "border-violet-500/40", glow: "shadow-[0_0_15px_rgba(139,92,246,0.15)]" },
+    rose: { text: "text-rose-400", bg: "bg-rose-500", border: "border-rose-500/40", glow: "shadow-[0_0_15px_rgba(244,63,94,0.15)]" },
+  };
+
+  const fontMap = {
+    sans: "font-sans",
+    serif: "font-serif",
+    mono: "font-mono",
+  };
+
   return (
-    <div id="features" className="bg-black pt-36">
-      <div>
-        <div className="flex flex-col items-center">
+    <div id="features" className="bg-black pt-36 pb-20 relative overflow-hidden">
+      {/* Background radial glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div className="max-w-5xl mx-auto px-4">
+        {/* Section Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center mb-16 text-center"
+        >
           <Badge text="AI-powered features" />
-          <h1 className="text-transparent bg-linear-to-r bg-clip-text from-neutral-300 via-neutral-100 to-neutral-300 mt-4 text-2xl w-xs lg:text-4xl font-bold lg:w-xl text-center">
-            Powerful Features to Build Your Standout Resume
-          </h1>
-          <p className="text-sm lg:text-lg text-neutral-400 w-xs lg:w-lg text-center leading-xs mt-3">
-            Explore tools designed to make your resume shine—powered by the latest AI technology.
+          <h2 className="text-transparent bg-linear-to-r bg-clip-text from-neutral-200 via-neutral-100 to-neutral-400 mt-4 text-3xl md:text-5xl font-bold max-w-2xl tracking-tight leading-tight">
+            Build Your Standout Resume with Next-Gen Features
+          </h2>
+          <p className="text-sm md:text-base text-neutral-400 max-w-xl leading-relaxed mt-4">
+            Explore advanced tools designed to make your resume shine—powered by the latest ATS insights and AI technologies.
           </p>
-        </div>
-        <div className="justify-center flex flex-col md:flex-row items-center lg:-mt-3">
-          <img
-            className="max-w-3xl w-full"
-            src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/features/card-image-1.png"
-            alt=""
-          />
-          <div className="space-y-6 px-4 md:px-0 ">
-            <div className="flex items-center justify-center gap-6 max-w-md hover:-translate-y-1 px-7 py-4.5 transition-all duration-300 ease-in-out hover:bg-violet-500/10 rounded-lg">
-              <div className="p-6 aspect-square bg-violet-100 rounded-full">
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14 18.667V24.5m4.668-8.167V24.5m4.664-12.833V24.5m2.333-21L15.578 13.587a.584.584 0 0 1-.826 0l-3.84-3.84a.583.583 0 0 0-.825 0L2.332 17.5M4.668 21v3.5m4.664-8.167V24.5"
-                    stroke="#7F22FE"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+        </motion.div>
+
+        {/* Bento Grid */}
+        <motion.div 
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.15
+              }
+            }
+          }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          
+          {/* Card 1: AI Bullet Enhancer (Spans 2 cols) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.01 }} className="md:col-span-2 group relative border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 bg-green-950/50 rounded-lg text-green-400 border border-green-800/30">
+                  <Sparkles className="size-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-100 font-sans">AI Bullet Enhancer</h3>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-violet-500">
-                  Real-Time Analytics
-                </h3>
-                <p className="text-sm text-neutral-400">
-                  Get instant insights into your finances with live dashboards.
-                </p>
+              <p className="text-sm text-neutral-400 max-w-md mb-6 font-sans">
+                Instantly turn simple sentences into impact-driven, metrics-focused professional accomplishments that catch recruiters' eyes.
+              </p>
+            </div>
+
+            {/* Interactive Showcase */}
+            <div className="bg-neutral-950/80 border border-neutral-800/50 rounded-xl p-4.5 relative overflow-hidden font-sans">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-neutral-500">Resume Builder Editor</span>
+                <span className="text-[10px] text-green-400 flex items-center gap-1 font-medium bg-green-500/10 px-2 py-0.5 rounded-full">
+                  <span className="size-1.5 rounded-full bg-green-400 animate-pulse"></span> Ready
+                </span>
+              </div>
+              
+              <div className="min-h-[60px] flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0">
+                  {aiTextState === "completed" ? (
+                    <div className="size-5 bg-green-500/20 rounded-full flex items-center justify-center border border-green-500/30 text-green-400">
+                      <Check className="size-3" />
+                    </div>
+                  ) : (
+                    <div className="size-5 bg-neutral-800 rounded-full flex items-center justify-center border border-neutral-700 text-neutral-400 text-[10px] font-mono">
+                      1
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <p className={`text-xs leading-relaxed transition-all duration-500 ${aiTextState === 'completed' ? 'text-green-300 font-medium' : 'text-neutral-300'}`}>
+                    {aiTextState === "optimizing" ? (
+                      <span className="flex items-center gap-2 text-neutral-400">
+                        <span className="size-3.5 border-2 border-green-400 border-t-transparent rounded-full animate-spin"></span> Rewriting bullet point...
+                      </span>
+                    ) : typedText}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="mt-4 pt-3 border-t border-neutral-900 flex justify-end gap-2.5">
+                {aiTextState === "completed" ? (
+                  <button 
+                    onClick={handleAiReset}
+                    className="text-[11px] px-3.5 py-1.5 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 transition-colors font-medium cursor-pointer"
+                  >
+                    Reset
+                  </button>
+                ) : (
+                  <button 
+                    onClick={handleAiOptimize}
+                    disabled={aiTextState === "optimizing"}
+                    className="text-[11px] px-3.5 py-1.5 rounded-lg bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500 hover:text-black hover:border-transparent transition-all font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    <Wand2 className="size-3" /> Optimize with AI
+                  </button>
+                )}
               </div>
             </div>
-            <div className="flex items-center justify-center gap-6 max-w-md hover:-translate-y-1 px-7 py-4.5 transition-all duration-300 ease-in-out hover:bg-green-500/10 rounded-lg">
-              <div className="p-6 aspect-square bg-green-100 rounded-full">
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M14 11.667A2.333 2.333 0 0 0 11.667 14c0 1.19-.117 2.929-.304 4.667m4.972-3.36c0 2.776 0 7.443-1.167 10.36m5.004-1.144c.14-.7.502-2.683.583-3.523M2.332 14a11.667 11.667 0 0 1 21-7m-21 11.667h.01m23.092 0c.233-2.333.152-6.246 0-7"
-                    stroke="#00A63E"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M5.832 22.75C6.415 21 6.999 17.5 6.999 14a7 7 0 0 1 .396-2.333m2.695 13.999c.245-.77.525-1.54.665-2.333m-.255-15.4A7 7 0 0 1 21 14v2.333"
-                    stroke="#00A63E"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+          </motion.div>
+
+          {/* Card 2: Live Preview (Spans 1 col) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.02 }} className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
+                  <Eye className="size-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-100 font-sans">Live Preview</h3>
               </div>
+              <p className="text-sm text-neutral-400 font-sans">
+                Observe changes instantly side-by-side. Form editing and layout rendering happen concurrently with no delay.
+              </p>
+            </div>
+
+            {/* Live Typing Preview Mockup */}
+            <div className="bg-neutral-950/80 border border-neutral-800/50 rounded-xl p-4 flex flex-col gap-2.5 relative overflow-hidden h-[130px] justify-center font-sans">
+              {/* Scan grid */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#1f293708_1px,transparent_1px)] bg-size-[10px_10px] pointer-events-none"></div>
+              
+              {/* Pulsing indicator */}
+              <div className="flex items-center gap-2 mb-1">
+                <span className="relative flex size-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full size-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-[10px] font-medium text-neutral-400 tracking-wider uppercase">Live Rendering</span>
+              </div>
+
+              {/* Mock Resume Lines */}
               <div className="space-y-2">
-                <h3 className="text-base font-semibold text-green-500">
-                  Bank-Grade Security
-                </h3>
-                <p className="text-sm text-neutral-400">
-                  End-to-end encryption, 2FA, compliance with GDPR standards.
-                </p>
+                <div className="h-2.5 bg-neutral-700/60 rounded-full w-3/4 animate-pulse"></div>
+                <div className="h-2 bg-neutral-800/80 rounded-full w-full"></div>
+                <div className="h-2 bg-neutral-800/80 rounded-full w-5/6"></div>
+                <div className="h-2 bg-neutral-800/80 rounded-full w-2/3"></div>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-6 max-w-md hover:-translate-y-1 px-7 py-4.5 transition-all duration-300 ease-in-out hover:bg-orange-500/10 rounded-lg">
-              <div className="p-6 aspect-square bg-orange-100 rounded-full">
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 28 28"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4.668 25.666h16.333a2.333 2.333 0 0 0 2.334-2.333V8.166L17.5 2.333H7a2.333 2.333 0 0 0-2.333 2.333v4.667"
-                    stroke="#F54900"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M16.332 2.333V7a2.334 2.334 0 0 0 2.333 2.333h4.667m-21 8.167h11.667M10.5 21l3.5-3.5-3.5-3.5"
-                    stroke="#F54900"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+          </motion.div>
+
+          {/* Card 3: ATS Optimization (Spans 1 col) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.02 }} className="group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] flex flex-col justify-between min-h-[340px]">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
+                  <FileText className="size-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-100 font-sans">100% ATS Friendly</h3>
               </div>
-              <div className="space-y-2">
-                <h3 className="text-base font-semibold text-orange-400">
-                  Customizable Reports
-                </h3>
-                <p className="text-sm text-neutral-400">
-                  Export professional, audit-ready financial reports for tax or
-                  internal review.
-                </p>
+              <p className="text-sm text-neutral-400 font-sans">
+                Crafted layouts tested to pass automated parser checks, securing your way past filter screens.
+              </p>
+            </div>
+
+            {/* ATS Scanning Animation */}
+            <div className="bg-neutral-950/80 border border-neutral-800/50 rounded-xl p-4.5 relative overflow-hidden h-[130px] flex flex-col justify-between font-sans">
+              {/* Scan Laser effect */}
+              <div className="absolute left-0 right-0 h-[2px] bg-green-500/60 blur-[1px] shadow-[0_0_8px_#22c55e] animate-[scan_3s_ease-in-out_infinite]"></div>
+              
+              {/* Scanner Grid */}
+              <div className="space-y-1.5 relative z-10">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-mono text-neutral-500">Scanning document...</span>
+                  <span className="text-[10px] font-mono font-bold text-green-400">98% Match</span>
+                </div>
+                <div className="w-full bg-neutral-900 h-1.5 rounded-full overflow-hidden">
+                  <div className="bg-green-500 h-full rounded-full animate-[progress_3s_ease-in-out_infinite]" style={{ width: "98%" }}></div>
+                </div>
+              </div>
+
+              {/* Minimalist document visual */}
+              <div className="space-y-1.5 opacity-60">
+                <div className="h-1 bg-neutral-700 rounded-full w-12"></div>
+                <div className="h-1 bg-neutral-800 rounded-full w-24"></div>
+                <div className="h-1 bg-neutral-800 rounded-full w-20"></div>
+              </div>
+
+              <style>{`
+                @keyframes scan {
+                  0%, 100% { top: 10%; }
+                  50% { top: 85%; }
+                }
+                @keyframes progress {
+                  0%, 100% { width: 10%; }
+                  50% { width: 98%; }
+                }
+              `}</style>
+            </div>
+          </motion.div>
+
+          {/* Card 4: Pixel-Perfect Customizer (Spans 2 cols) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0.2, duration: 0.8 } } }} whileHover={{ scale: 1.01 }} className="md:col-span-2 group border border-neutral-800/80 bg-neutral-900/10 backdrop-blur-md rounded-2xl p-6 transition-all duration-300 hover:border-green-500/30 hover:shadow-[0_0_30px_rgba(34,197,94,0.03)] overflow-hidden flex flex-col justify-between min-h-[340px]">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 bg-neutral-800/80 rounded-lg text-green-400 border border-neutral-700/50">
+                  <Palette className="size-5" />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-100 font-sans">Style Customizer</h3>
+              </div>
+              <p className="text-sm text-neutral-400 max-w-md mb-6 font-sans">
+                Adjust themes, sizing, spacing, and typography on the fly. Tailor your resume style to match the target company's culture.
+              </p>
+            </div>
+
+            {/* Interactive Customizer Panel & Preview */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-neutral-950/80 border border-neutral-800/50 rounded-xl p-4.5 font-sans">
+              {/* Panel Controls */}
+              <div className="flex flex-col gap-3.5 justify-center border-b sm:border-b-0 sm:border-r border-neutral-800/60 pb-3 sm:pb-0 sm:pr-4">
+                {/* Theme Selector */}
+                <div>
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-neutral-500 block mb-1.5">
+                    Accent Color
+                  </label>
+                  <div className="flex gap-2">
+                    {Object.keys(colorMap).map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setAccentColor(color)}
+                        className={`size-6 rounded-full border cursor-pointer transition-all flex items-center justify-center ${
+                          accentColor === color
+                            ? "border-white scale-110"
+                            : "border-transparent hover:scale-105"
+                        }`}
+                        style={{
+                          backgroundColor:
+                            color === "emerald"
+                              ? "#10b981"
+                              : color === "sky"
+                              ? "#0ea5e9"
+                              : color === "violet"
+                              ? "#8b5cf6"
+                              : "#f43f5e",
+                        }}
+                      >
+                        {accentColor === color && (
+                          <Check className="size-3 text-black font-extrabold" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Font Family Selector */}
+                <div>
+                  <label className="text-[10px] uppercase font-bold tracking-wider text-neutral-500 block mb-1.5">
+                    Typography Font
+                  </label>
+                  <div className="flex gap-1.5">
+                    {["sans", "serif", "mono"].map((font) => (
+                      <button
+                        key={font}
+                        onClick={() => setFontFamily(font)}
+                        className={`text-[10px] px-2.5 py-1 rounded-md border font-medium cursor-pointer transition-colors capitalize ${
+                          fontFamily === font
+                            ? "bg-neutral-800 text-white border-neutral-700"
+                            : "bg-neutral-900/40 text-neutral-400 border-neutral-800 hover:text-neutral-200"
+                        }`}
+                      >
+                        {font}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Live Preview Resume */}
+              <div className="flex flex-col justify-center pl-0 sm:pl-2">
+                <div className={`border p-3.5 rounded-lg bg-neutral-900/60 shadow-lg transition-all duration-300 ${colorMap[accentColor].border} ${colorMap[accentColor].glow} ${fontMap[fontFamily]}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`size-3 rounded-full ${colorMap[accentColor].bg}`}></div>
+                    <div className="flex-1">
+                      <div className="h-2 bg-neutral-100 rounded-full w-20 mb-1"></div>
+                      <div className="h-1 bg-neutral-500 rounded-full w-28"></div>
+                    </div>
+                  </div>
+                  <div className="border-t border-neutral-800/80 pt-2 space-y-1.5">
+                    <div className="flex justify-between items-center">
+                      <span className={`text-[8px] font-bold ${colorMap[accentColor].text}`}>Experience</span>
+                      <span className="text-[6px] text-neutral-500">2024 - Present</span>
+                    </div>
+                    <div className="h-1 bg-neutral-700/60 rounded-full w-full"></div>
+                    <div className="h-1 bg-neutral-700/60 rounded-full w-5/6"></div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+          
+        </motion.div>
       </div>
     </div>
   );
 };
 
 export default FeatureSection;
+
