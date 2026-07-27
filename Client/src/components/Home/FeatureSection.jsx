@@ -5,7 +5,7 @@ import Badge from "./Badge";
 const FeatureSection = () => {
   // AI Bullet Enhancer State
   const [aiTextState, setAiTextState] = useState("idle"); // 'idle', 'optimizing', 'completed'
-  const [typedText, setTypedText] = useState("Wrote JavaScript code for client website.");
+  const [typedText, setTypedText] = useState("Created a dashboard using React.");
 
   const handleAiOptimize = () => {
     if (aiTextState !== "idle") return;
@@ -20,7 +20,7 @@ const FeatureSection = () => {
 
   const handleAiReset = () => {
     setAiTextState("idle");
-    setTypedText("Wrote JavaScript code for client website.");
+    setTypedText("Created a dashboard using React.");
   };
 
   // Pixel-Perfect Style Customizer State

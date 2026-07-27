@@ -198,7 +198,7 @@ const ResumeBuilder = () => {
             <hr className="absolute top-0 left-0 h-1 bg-linear-to-r from-green-50 to-green-600 border-none transition-all ease-in-out duration-300" style={{ width: `${activeSectionIndex * 100 / (sections.length - 1)}%` }} />
 
             {/* Nav */}
-            <div className="flex justify-between items-center mb-6 border-b border-green-500/30 py-2">
+            <div className="flex justify-between flex-col md:flex-row md:items-center mb-6 border-b border-green-500/30 py-2 pt-6 gap-2 md:gap-0">
               {/* Buttons */}
               <div className="flex items-center gap-2">
                 <TempelateSelector selectedTempelate={resumeData.template} onChange={(template) => setResumeData(prev => ({ ...prev, template }))} />

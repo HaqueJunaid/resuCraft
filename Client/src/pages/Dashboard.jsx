@@ -105,14 +105,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto min-h-screen pt-30 px-4 lg:px-6 pb-10 text-neutral-100">
+    <div className="w-full max-w-7xl mx-auto min-h-screen pt-24 md:pt-30 px-4 lg:px-6 pb-10 text-neutral-100">
       {/* Dashboard Top Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4 border-b border-neutral-900/60 pb-6">
         <div>
           <h1 className="text-3xl font-extrabold text-neutral-100 tracking-tight">Dashboard</h1>
           <p className="text-sm text-neutral-400 mt-1">Manage, edit, and create your professional resumes</p>
         </div>
-        <div className="flex gap-3 w-full sm:w-auto z-10">
+        <div className="flex gap-3 w-full sm:w-auto flex-col md:flex-row z-10">
           <button
             onClick={() => setIsCreateResume(true)}
             className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-neutral-950 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-green-500/10 hover:shadow-green-500/25 active:scale-[0.98] cursor-pointer"

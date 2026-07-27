@@ -4,7 +4,7 @@ import { LogOut } from "lucide-react";
 
 const LayoutNavbar = () => {
   return (
-    <nav className="fixed top-0 left-0 z-100 w-full px-4 lg:px-6 py-4 bg-neutral-950/70 backdrop-blur-xl border-b border-neutral-900 print:hidden">
+    <nav className="fixed top-0 left-0 z-100 w-full px-4 lg:px-6 py-4 bg-neutral-950 backdrop-blur-xl border-b border-neutral-900 print:hidden">
       <div className="w-full max-w-7xl flex items-center justify-between mx-auto">
         {/* Logo and Separator Badge */}
         <div className="flex items-center gap-3">
