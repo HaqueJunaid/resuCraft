@@ -2,12 +2,12 @@ import prisma from "../config/prisma.js";
 import { generateOTP } from "../utils/otp.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { generateToken } from "../utils/token.js";
-import { generateOTPTemplate, sendEmail } from "../utils/email.js";
+import { generateForgotOTPTemplate, generateOTPTemplate, sendEmail } from "../utils/email.js";
 
 export const register = async (req, res) => {
     try {
         const { email, password, name } = req.body;
-        console.log({email, password, name})
+        console.log({ email, password, name })
 
         if (!email || !password) {
             return res.status(400).json({ error: "Email and password are required" });
@@ -131,3 +131,44 @@ export const login = async (req, res) => {
         return res.status(500).json({ error: "Internal server error" });
     }
 };
+
+export const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).send({ error: "Email Required" });
+        }
+
+        const user = await prisma.user.findFirst({ where: { email } });
+
+        if (!user) {
+            return res.status(404).send({ error: "User Not Found" });
+        }
+
+        if (!user.isVerified) {
+            return res.status(403).send({ error: "Account Not Verified" });
+        }
+
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
+
+        await prisma.user.update({
+            where: { email },
+            data: { forgotOtp: otp, forgotOtpExpiry: otpExpiry }
+        });
+
+        let html = generateForgotOTPTemplate(otp);
+
+        try {
+            await sendEmail({ to: email, subject: "Change your account password", html });
+        } catch (emailError) {
+            console.error("Failed to send OTP email", emailError);
+        }
+
+        return res.status(200).send({ message: "Check your email to forget your account password" });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message, stack: error.stack });
+    }
+}
