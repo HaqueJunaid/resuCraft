@@ -2,7 +2,7 @@ import prisma from "../config/prisma.js";
 import { generateOTP } from "../utils/otp.js";
 import { hashPassword, verifyPassword } from "../utils/password.js";
 import { generateToken } from "../utils/token.js";
-import { sendEmail } from "../utils/email.js";
+import { generateOTPTemplate, sendEmail } from "../utils/email.js";
 
 export const register = async (req, res) => {
     try {
@@ -37,11 +37,7 @@ export const register = async (req, res) => {
         }
 
         // Send OTP email
-        const html = `
-            <h2>Welcome to ResuCraft!</h2>
-            <p>Your OTP for account verification is: <strong>${otp}</strong></p>
-            <p>This OTP is valid for 10 minutes.</p>
-        `;
+        const html = generateOTPTemplate(otp);
 
         try {
             await sendEmail({ to: email, subject: "Verify your account", html });
