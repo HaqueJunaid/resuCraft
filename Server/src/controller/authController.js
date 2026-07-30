@@ -1,0 +1,137 @@
+import prisma from "../config/prisma.js";
+import { generateOTP } from "../utils/otp.js";
+import { hashPassword, verifyPassword } from "../utils/password.js";
+import { generateToken } from "../utils/token.js";
+import { sendEmail } from "../utils/email.js";
+
+export const register = async (req, res) => {
+    try {
+        const { email, password, name } = req.body;
+        console.log({email, password, name})
+
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required" });
+        }
+
+        let user = await prisma.user.findUnique({ where: { email } });
+
+        if (user && user.isVerified) {
+            return res.status(400).json({ error: "User already exists and is verified. Please log in." });
+        }
+
+        const hashedPassword = await hashPassword(password);
+        const otp = generateOTP();
+        const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+        if (user) {
+            // Update unverified user with new OTP and password
+            user = await prisma.user.update({
+                where: { email },
+                data: { password: hashedPassword, name, otp, otpExpiry },
+            });
+        } else {
+            // Create new user
+            user = await prisma.user.create({
+                data: { email, password: hashedPassword, name, otp, otpExpiry },
+            });
+        }
+
+        // Send OTP email
+        const html = `
+            <h2>Welcome to ResuCraft!</h2>
+            <p>Your OTP for account verification is: <strong>${otp}</strong></p>
+            <p>This OTP is valid for 10 minutes.</p>
+        `;
+
+        try {
+            await sendEmail({ to: email, subject: "Verify your account", html });
+        } catch (emailError) {
+            console.error("Failed to send OTP email", emailError);
+            // Optionally, handle email failure here (e.g., return specific message)
+        }
+
+        return res.status(201).json({ message: "Registration successful. Please check your email for the OTP." });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message, stack: error.stack });
+    }
+};
+
+export const verifyOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        if (!email || !otp) {
+            return res.status(400).json({ error: "Email and OTP are required" });
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        if (user.isVerified) {
+            return res.status(400).json({ error: "User is already verified" });
+        }
+
+        if (user.otp !== otp) {
+            return res.status(400).json({ error: "Invalid OTP" });
+        }
+
+        if (new Date() > new Date(user.otpExpiry)) {
+            return res.status(400).json({ error: "OTP has expired" });
+        }
+
+        // Mark as verified and clear OTP fields
+        await prisma.user.update({
+            where: { email },
+            data: {
+                isVerified: true,
+                otp: null,
+                otpExpiry: null,
+            },
+        });
+
+        // Optionally, generate and return a token here to log them in immediately
+        const token = generateToken({ id: user.id, email: user.email });
+
+        return res.status(200).json({ message: "Account verified successfully", token });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ error: "Email and password are required" });
+        }
+
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        if (!user.isVerified) {
+            return res.status(403).json({ error: "Account not verified. Please verify your email first." });
+        }
+
+        const isValidPassword = await verifyPassword(password, user.password);
+
+        if (!isValidPassword) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        const token = generateToken({ id: user.id, email: user.email });
+
+        return res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
