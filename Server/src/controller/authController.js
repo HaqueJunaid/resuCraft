@@ -172,3 +172,39 @@ export const forgotPassword = async (req, res) => {
         return res.status(500).json({ error: error.message, stack: error.stack });
     }
 }
+
+export const resetPassword = async (req, res) => {
+    try {
+        const { email, otp, password } = req.body;
+
+        if (!email || !otp || !password) {
+            return res.status(400).send({ error: "All fields are required" });
+        }
+
+        let user = await prisma.user.findFirst({where: { email }});
+
+        if (!user || !user.isVerified) {
+            return res.status().send({ error: "User not found" });
+        }
+
+        if(user.forgotOtp !== otp || new Date() > new Date(user.forgotOtpExpiry)) {
+            return res.status().send({ error: "Invalid or expired OTP" });
+        }
+
+        const hashedPassword = await hashPassword(password);
+
+        console.log({user, hashPassword});
+
+        let updatedUser = await prisma.user.update({
+            where: { email },
+            data: { password: hashedPassword, forgotOtp: null, forgotOtpExpiry: null }
+        })
+
+        const token = generateToken({ id: updatedUser.id, email: updatedUser.email });
+
+        return res.status(200).json({ message: "Password reset successful", token });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: error.message, stack: error.stack });
+    }
+}

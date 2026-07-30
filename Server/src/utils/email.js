@@ -52,9 +52,9 @@ export const generateOTPTemplate = (otp) => {
                 padding: 0;
             }
             .container {
-                max-width: 600px;
+                max-width: 100%;
                 margin: 0 auto;
-                padding: 40px 20px;
+                padding: 40px 60px;
                 background-color: #000000;
             }
             .header {
@@ -64,8 +64,11 @@ export const generateOTPTemplate = (otp) => {
             .logo {
                 font-size: 28px;
                 font-weight: bold;
-                color: #16a34a; /* green-600 */
+                color: #ffffff;
                 text-decoration: none;
+            }
+            .logo > span {
+                color: #22c55e;
             }
             .content {
                 background-color: #111111;
@@ -146,9 +149,9 @@ export const generateForgotOTPTemplate = (otp) => {
                 padding: 0;
             }
             .container {
-                max-width: 600px;
+                max-width: 100%;
                 margin: 0 auto;
-                padding: 40px 20px;
+                padding: 40px 60px;
                 background-color: #000000;
             }
             .header {
@@ -158,8 +161,11 @@ export const generateForgotOTPTemplate = (otp) => {
             .logo {
                 font-size: 28px;
                 font-weight: bold;
-                color: #16a34a; /* green-600 */
+                color: #ffffff;
                 text-decoration: none;
+            }
+            .logo > span {
+                color: #22c55e;
             }
             .content {
                 background-color: #111111;
@@ -204,7 +210,7 @@ export const generateForgotOTPTemplate = (otp) => {
     <body>
         <div class="container">
             <div class="header">
-                <span class="logo">ResuCraft</span>
+                <span class="logo">Resu<span>Craft</span></span>
             </div>
             <div class="content">
                 <h1>Forgot Password</h1>
