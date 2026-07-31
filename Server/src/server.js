@@ -4,15 +4,21 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import rateLimiter from "./middleware/globalRateLimiter.js";
 import authRoutes from "./routes/authRoutes.js";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "GET", "PATCH", "PUT", "DELETE"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+}))
 app.set('trust proxy', 1);
 app.use(rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 
 app.use("/api/auth", authRoutes);
 

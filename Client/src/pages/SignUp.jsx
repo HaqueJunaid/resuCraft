@@ -1,6 +1,5 @@
 import { LockIcon, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,7 +20,7 @@ const Signup = () => {
     setIsLoading(true);
     console.log("Signup data:", formData);
     try {
-      let res = await axios.post("http://localhost:8080/api/auth/signup", formData);
+      let res = await axios.post("http://localhost:8080/api/auth/register", formData);
       console.log(res.data.message);
       if (res.status === 201) {
         toast.success(res.data.message);
@@ -88,6 +87,7 @@ const Signup = () => {
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     {...register("fullName", { required: "Name is required" })}
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -103,6 +103,7 @@ const Signup = () => {
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     {...register("email", { required: "Email is required" })}
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -118,6 +119,7 @@ const Signup = () => {
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     {...register("password", { required: "Password is required" })}
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -125,7 +127,7 @@ const Signup = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full h-12 mt-4 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50"
+                className={`w-full h-12 mt-4 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50`}
                 disabled={isLoading}
               >
                 {isLoading ? "Creating Account..." : "Create Account"}

@@ -3,6 +3,7 @@ dotenv.config();
 
 const config = {
     port: process.env.PORT || 4000,
+    client_origin: process.env.CLIENT_ORIGIN,
     db_url: process.env.DATABASE_URL,
     jwt_secret: process.env.JWT_SECRET || "default_secret",
     smtp: {

@@ -1,40 +1,46 @@
-import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
-import { Mail, ArrowLeft } from "lucide-react";
+import { Lock, Hash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
-  document.title = "resuCraft | Forgot Password";
+  document.title = "resuCraft | Reset Password";
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    watch,
   } = useForm();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    localStorage.setItem("email", data.email);
-    console.log("Reset password request:", data);
+    // console.log("New password data:", data);
     try {
-      let res = await axios.post("http://localhost:8080/api/auth/forgot-password", data);
-      if (res.status === 200) {
-        toast.success(res.data.message);
-        navigate("/reset-password");
+      if (data.password === data.confirmPassword) {
+        let formData = {password: data.password, email: localStorage.getItem("email"), otp: data.otp};
+        let res = await axios.post("http://localhost:8080/api/auth/reset-password", formData);
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          navigate("/login");
+        } else {
+          toast.error(res.data.message);
+        }
       } else {
-        toast.error(res.data.message);
+        toast.error("Passwords do not match.");
       }
     } catch (error) {
-      toast.error(error.response?.data?.error || "Failed to send reset link. Please try again.");
+      console.error(error.response?.data?.error || error.message);
+      toast.error(error.response?.data?.error || "Password reset failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
+
+  const password = watch("password");
 
   return (
     <div className="w-full min-h-screen bg-neutral-950 text-neutral-100 flex relative overflow-hidden select-none">
@@ -156,28 +162,54 @@ const ForgotPassword = () => {
         <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 md:p-12">
           <div className="w-full max-w-md bg-neutral-900/30 md:bg-transparent p-6 md:p-0 rounded-2xl border border-neutral-800/50 md:border-none backdrop-blur-md md:backdrop-blur-none">
             <div className="text-center md:text-left mb-8">
-              <Link to="/login" className="inline-flex items-center gap-2 text-xs text-neutral-400 hover:text-green-400 font-medium transition-colors mb-4 group cursor-pointer">
-                <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-                Back to sign in
-              </Link>
-              <h2 className="text-3xl font-extrabold text-neutral-100 tracking-tight mt-1">Forgot Password</h2>
+              <h2 className="text-3xl font-extrabold text-neutral-100 tracking-tight mt-1">Reset Password</h2>
               <p className="text-sm text-neutral-400 mt-2">
-                Enter your email address and we'll send you a link to reset your password.
+                Enter your new password below.
               </p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              {/* Email Input */}
+              {/* OTP Input */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-400 block pl-1">Email Address</label>
+                <label className="text-xs font-semibold text-neutral-400 block pl-1">OTP</label>
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
-                  <Mail size={18} className="text-neutral-500" />
+                  <Hash size={18} className="text-neutral-500" />
                   <input
-                    type="email"
-                    placeholder="name@example.com"
+                    type="text"
+                    placeholder="Enter OTP from email"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     required
-                    {...register("email")}
+                    {...register("otp")}
+                  />
+                </div>
+              </div>
+
+              {/* Password Input */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-400 block pl-1">New Password</label>
+                <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
+                  <Lock size={18} className="text-neutral-500" />
+                  <input
+                    type="password"
+                    placeholder="Enter new password"
+                    className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
+                    required
+                    {...register("password")}
+                  />
+                </div>
+              </div>
+
+              {/* Confirm Password Input */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-400 block pl-1">Confirm Password</label>
+                <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
+                  <Lock size={18} className="text-neutral-500" />
+                  <input
+                    type="password"
+                    placeholder="Confirm new password"
+                    className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
+                    required
+                    {...register("confirmPassword")}
                   />
                 </div>
               </div>
@@ -188,7 +220,7 @@ const ForgotPassword = () => {
                 className="w-full h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50"
                 disabled={isLoading}
               >
-                {isLoading ? "Sending Link..." : "Send Reset Link"}
+                {isLoading ? "Resetting..." : "Reset Password"}
               </button>
             </form>
           </div>
@@ -199,4 +231,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

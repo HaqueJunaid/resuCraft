@@ -177,6 +177,8 @@ export const resetPassword = async (req, res) => {
     try {
         const { email, otp, password } = req.body;
 
+        console.log({email, })
+
         if (!email || !otp || !password) {
             return res.status(400).send({ error: "All fields are required" });
         }
@@ -200,9 +202,7 @@ export const resetPassword = async (req, res) => {
             data: { password: hashedPassword, forgotOtp: null, forgotOtpExpiry: null }
         })
 
-        const token = generateToken({ id: updatedUser.id, email: updatedUser.email });
-
-        return res.status(200).json({ message: "Password reset successful", token });
+        return res.status(200).json({ message: "Password reset successful" });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: error.message, stack: error.stack });

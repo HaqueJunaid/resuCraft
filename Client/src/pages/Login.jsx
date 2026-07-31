@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
 import { Lock, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
   document.title = "resuCraft | Login";
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -14,9 +17,21 @@ const Login = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     console.log("Login data:", data);
-    // Redirect to dashboard for demo / flow
-    navigate("/app");
+    try {
+      let res = await axios.post("http://localhost:8080/api/auth/login", data);
+      console.log(res.data);
+      if (res.status === 200) {
+        toast.success(res.data.message);
+        navigate("/app");
+      }
+    } catch (error) {
+      console.error(error.response?.data?.error || error.message);
+      toast.error(error.response?.data?.error || "Login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
