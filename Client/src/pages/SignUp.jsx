@@ -1,4 +1,4 @@
-import { LockIcon, Mail, User } from "lucide-react";
+import { Eye, EyeOff, LockIcon, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const Signup = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPasswod] = useState(false);
   document.title = "resuCraft | Signup";
 
   const {
@@ -114,13 +115,20 @@ const Signup = () => {
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
                   <LockIcon size={18} className="text-neutral-500" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     {...register("password", { required: "Password is required" })}
                     required
                     disabled={isLoading}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswod(!showPassword)}
+                    className="outline-none border-none bg-transparent text-neutral-400 hover:text-neutral-200 cursor-pointer transition-all duration-300"
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
 

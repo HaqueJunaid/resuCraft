@@ -121,7 +121,7 @@ const ForgotPassword = () => {
               </div>
 
               {/* Card 2: ATS Checker Card (Overlay Top-Right) */}
-              <div className="absolute top-2 -right-4 w-150 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
+              <div className="absolute top-2 -right-4 w-40 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
                 <div className="w-12 h-12 rounded-full border-4 border-green-500/20 border-t-green-400 flex items-center justify-center mb-2 animate-spin" style={{ animationDuration: '4s' }}>
                   <span className="text-xs font-bold text-neutral-100 font-mono">98%</span>
                 </div>

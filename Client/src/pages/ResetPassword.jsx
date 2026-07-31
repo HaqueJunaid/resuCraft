@@ -1,4 +1,4 @@
-import { Lock, Hash } from "lucide-react";
+import { Lock, Hash, EyeOff, Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import axios from "axios";
 
 const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   document.title = "resuCraft | Reset Password";
   const navigate = useNavigate();
 
@@ -127,7 +129,7 @@ const ResetPassword = () => {
               </div>
 
               {/* Card 2: ATS Checker Card (Overlay Top-Right) */}
-              <div className="absolute top-2 -right-4 w-150 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
+              <div className="absolute top-2 -right-4 w-40 p-4 rounded-xl border border-neutral-800/90 bg-neutral-900/80 backdrop-blur-xl shadow-2xl anim-float-fast select-none flex flex-col items-center justify-center text-center hover:border-green-500/30 transition-all duration-300" style={{ animationDelay: '1.5s' }}>
                 <div className="w-12 h-12 rounded-full border-4 border-green-500/20 border-t-green-400 flex items-center justify-center mb-2 animate-spin" style={{ animationDuration: '4s' }}>
                   <span className="text-xs font-bold text-neutral-100 font-mono">98%</span>
                 </div>
@@ -190,12 +192,19 @@ const ResetPassword = () => {
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
                   <Lock size={18} className="text-neutral-500" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter new password"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     required
                     {...register("password")}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="p-2 text-neutral-400 hover:text-neutral-200 transition-colors"
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
 
@@ -205,12 +214,19 @@ const ResetPassword = () => {
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
                   <Lock size={18} className="text-neutral-500" />
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirm new password"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     required
                     {...register("confirmPassword")}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="p-2 text-neutral-400 hover:text-neutral-200 transition-colors"
+                  >
+                    {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
 

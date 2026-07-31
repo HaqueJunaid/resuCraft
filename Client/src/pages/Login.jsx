@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -10,6 +10,7 @@ const Login = () => {
   const navigate = useNavigate();
   document.title = "resuCraft | Login";
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPasswod] = useState(false);
 
   const {
     register,
@@ -21,7 +22,7 @@ const Login = () => {
     console.log("Login data:", data);
     try {
       let res = await axios.post("http://localhost:8080/api/auth/login", data);
-      console.log(res.data);
+      console.log(res.data );
       if (res.status === 200) {
         toast.success(res.data.message);
         navigate("/app");
@@ -212,12 +213,19 @@ const Login = () => {
                 <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
                   <Lock size={18} className="text-neutral-500 transition-colors" />
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
                     required
                     {...register("password")}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswod(!showPassword)}
+                    className="text-neutral-500 hover:text-neutral-400 transition-colors"
+                  >
+                    {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+                  </button>
                 </div>
               </div>
 
@@ -225,8 +233,9 @@ const Login = () => {
               <button
                 type="submit"
                 className="w-full h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20"
+                disable={isLoading}
               >
-                Log In
+                {isLoading ? "Please wait..." : "Log In"}
               </button>
             </form>
 
