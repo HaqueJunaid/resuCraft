@@ -11,6 +11,9 @@ const config = {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
         from: process.env.SMTP_FROM || "noreply@resucraft.com",
+    },
+    redis: {
+        url: process.env.REDIS_URL
     }
 }
 

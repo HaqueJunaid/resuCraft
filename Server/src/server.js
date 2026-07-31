@@ -2,14 +2,17 @@ import "dotenv/config";
 import config from "./config/config.js";
 import express from "express";
 import cookieParser from "cookie-parser";
+import rateLimiter from "./middleware/globalRateLimiter.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
+app.set('trust proxy', 1);
+app.use(rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-import authRoutes from "./routes/authRoutes.js";
 
 app.use("/api/auth", authRoutes);
 
