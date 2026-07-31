@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import authServices from "../services/auth";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,8 +22,7 @@ const Login = () => {
     setIsLoading(true);
     console.log("Login data:", data);
     try {
-      let res = await axios.post("http://localhost:8080/api/auth/login", data);
-      console.log(res.data );
+      let res = await authServices.login(data);
       if (res.status === 200) {
         toast.success(res.data.message);
         navigate("/app");

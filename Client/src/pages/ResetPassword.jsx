@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import authServices from "../services/auth";
 
 const ResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +20,10 @@ const ResetPassword = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // console.log("New password data:", data);
     try {
       if (data.password === data.confirmPassword) {
         let formData = {password: data.password, email: localStorage.getItem("email"), otp: data.otp};
-        let res = await axios.post("http://localhost:8080/api/auth/reset-password", formData);
+        let res = await authServices.resetPassword(formData);
         if (res.status === 200) {
           toast.success(res.data.message);
           navigate("/login");

@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
 import { Mail, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import authServices from "../services/auth";
 
 const ForgotPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,9 +19,8 @@ const ForgotPassword = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     localStorage.setItem("email", data.email);
-    console.log("Reset password request:", data);
     try {
-      let res = await axios.post("http://localhost:8080/api/auth/forgot-password", data);
+      let res = await authServices.forgotPassword(data);
       if (res.status === 200) {
         toast.success(res.data.message);
         navigate("/reset-password");

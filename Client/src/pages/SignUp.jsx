@@ -2,9 +2,9 @@ import { Eye, EyeOff, LockIcon, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import authServices from "../services/auth";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -21,8 +21,7 @@ const Signup = () => {
     setIsLoading(true);
     console.log("Signup data:", formData);
     try {
-      let res = await axios.post("http://localhost:8080/api/auth/register", formData);
-      console.log(res.data.message);
+      let res = await authServices.signup(formData);
       if (res.status === 201) {
         toast.success(res.data.message);
         navigate("/otp-verification");
