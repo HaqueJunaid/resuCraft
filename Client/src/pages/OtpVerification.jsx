@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, KeyRound, ArrowLeft } from "lucide-react";
+import { Mail, KeyRound, ArrowLeft, LoaderIcon } from "lucide-react";
 
 const OtpVerification = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -100,10 +100,10 @@ const OtpVerification = () => {
               <button
                 type="button"
                 onClick={handleVerify}
-                className="w-full h-12 mt-6 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 h-12 mt-6 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
-                {isLoading ? "Verifying..." : "Verify Code"}
+                {isLoading ? <LoaderIcon className="animate-spin" size={18} /> : "Verify Code"}
               </button>
             </div>
           </div>

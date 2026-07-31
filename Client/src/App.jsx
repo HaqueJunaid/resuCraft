@@ -11,6 +11,8 @@ import { Bounce, ToastContainer } from "react-toastify";
 import OtpVerification from "./pages/OtpVerification";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 function App() {
   return (
@@ -30,9 +32,11 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/app" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="builder/:resumeId" element={<ResumeBuilder />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/app" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="builder/:resumeId" element={<ResumeBuilder />} />
+          </Route>
         </Route>
 
         <Route path="view/:resumeId" element={<ResumeView />} />

@@ -1,4 +1,4 @@
-import { Lock, Hash, EyeOff, Eye } from "lucide-react";
+import { Lock, Hash, EyeOff, Eye, LoaderIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -232,10 +232,10 @@ const ResetPassword = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 h-12 mt-2 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-70 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
-                {isLoading ? "Resetting..." : "Reset Password"}
+                {isLoading ? <LoaderIcon className="animate-spin" size={18} /> : "Reset Password"}
               </button>
             </form>
           </div>

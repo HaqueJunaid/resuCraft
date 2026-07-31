@@ -1,4 +1,4 @@
-import { Eye, EyeOff, LockIcon, Mail, User } from "lucide-react";
+import { Eye, EyeOff, LockIcon, Mail, User, LoaderIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -134,10 +134,10 @@ const Signup = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className={`w-full h-12 mt-4 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-50`}
+                className={`w-full flex items-center justify-center gap-2 h-12 mt-4 rounded-xl text-neutral-950 bg-linear-to-r from-green-400 to-emerald-500 hover:from-green-300 hover:to-emerald-400 transition-all duration-300 font-semibold text-sm cursor-pointer shadow-lg shadow-green-500/10 active:scale-[0.98] hover:shadow-green-500/20 disabled:opacity-70 disabled:cursor-not-allowed`}
                 disabled={isLoading}
               >
-                {isLoading ? "Creating Account..." : "Create Account"}
+                {isLoading ? <LoaderIcon className="animate-spin" size={18} /> : "Create Account"}
               </button>
             </form>
             <p className="text-neutral-500 text-sm mt-6 text-center md:text-left">

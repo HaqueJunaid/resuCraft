@@ -1,8 +1,22 @@
-import React from "react";
+import { useState } from "react";
+import authServices from "../services/auth";
 import Logo from "./Logo";
-import { LogOut } from "lucide-react";
+import { LoaderIcon, LogOut } from "lucide-react";
+import { toast } from "react-toastify";
 
 const LayoutNavbar = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      setIsLoading(true);
+      await authServices.logout();
+    } finally {
+      toast.success("Logged out successfully");
+      setIsLoading(false);
+    }
+  }
+
   return (
     <nav className="fixed top-0 left-0 z-100 w-full px-4 lg:px-6 py-4 bg-neutral-950 backdrop-blur-xl border-b border-neutral-900 print:hidden">
       <div className="w-full max-w-7xl flex items-center justify-between mx-auto">
@@ -31,9 +45,8 @@ const LayoutNavbar = () => {
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-neutral-950 shadow-md"></span>
           </div>
 
-          <button className="flex items-center justify-center gap-2 text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700/80 transition-all duration-300 px-4 rounded-xl py-2 text-xs sm:text-sm font-semibold cursor-pointer active:scale-[0.98]">
-            <LogOut size={14} className="text-neutral-400" />
-            Logout
+          <button disabled={isLoading} onClick={handleLogout} className="flex items-center justify-center gap-2 text-neutral-300 hover:text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700/80 transition-all duration-300 px-4 rounded-xl py-2 text-xs sm:text-sm font-semibold cursor-pointer active:scale-[0.98] disable:opacity-0">
+            {isLoading ? <LoaderIcon className="animate-spin" size={14} /> : <span className="flex items-center justify-center gap-2"><LogOut size={14} className="text-neutral-400" /> Logout</span>}
           </button>
         </div>
       </div>
