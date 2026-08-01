@@ -3,7 +3,6 @@ import { Eye, EyeOff, Lock, Mail, LoaderIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import authServices from "../services/auth";
 
@@ -20,7 +19,6 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    console.log("Login data:", data);
     try {
       let res = await authServices.login(data);
       if (res.status === 200) {

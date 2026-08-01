@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, KeyRound, ArrowLeft, LoaderIcon } from "lucide-react";
+import { KeyRound, ArrowLeft, LoaderIcon } from "lucide-react";
+import authServices from "../services/auth";
 
 const OtpVerification = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -10,25 +10,18 @@ const OtpVerification = () => {
   const navigate = useNavigate();
 
   const otpRef = useRef(null);
-  const emailRef = useRef(null);
 
   const handleVerify = async () => {
     setIsLoading(true);
     try {
-      if (otpRef.current?.value === "" || emailRef.current?.value === "") {
+      if (otpRef.current?.value === "") {
         toast.error("Please enter the OTP and email");
         return;
       }
 
-      let res = await axios.post("http://localhost:8080/api/auth/verify-otp", {
-        otp: otpRef.current?.value,
-        email: emailRef.current?.value
-      }, { withCredentials: true });
-
-      console.log(res.data);
-
+      let res = await authServices.verifyAccount({otp: otpRef.current.value, email: localStorage.getItem("email")});
       if (res.status === 200) {
-        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.removeItem("email");
         toast.success("Account verified successfully");
         navigate("/app");
       }
@@ -65,21 +58,6 @@ const OtpVerification = () => {
             </div>
 
             <div className="space-y-4">
-              {/* Email Input */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-400 block pl-1">Email Address</label>
-                <div className="flex items-center w-full bg-neutral-950/80 focus-within:bg-neutral-950 border border-neutral-800 focus-within:border-green-500/60 h-12 rounded-xl overflow-hidden pl-4 pr-3 gap-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(34,197,94,0.06)]">
-                  <Mail size={18} className="text-neutral-500" />
-                  <input
-                    ref={emailRef}
-                    type="email"
-                    placeholder="name@example.com"
-                    className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
-                    required
-                  />
-                </div>
-              </div>
-
               {/* OTP Input */}
               <div className="space-y-1.5">
                 <label className="text-xs font-semibold text-neutral-400 block pl-1">6-Digit Code</label>

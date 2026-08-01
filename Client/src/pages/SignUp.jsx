@@ -19,10 +19,10 @@ const Signup = () => {
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
-    console.log("Signup data:", formData);
     try {
       let res = await authServices.signup(formData);
       if (res.status === 201) {
+        localStorage.setItem("email", formData.email);
         toast.success(res.data.message);
         navigate("/otp-verification");
       }
@@ -85,7 +85,7 @@ const Signup = () => {
                     type="text"
                     placeholder="John Doe"
                     className="bg-transparent text-neutral-200 placeholder-neutral-600 outline-none text-sm w-full h-full"
-                    {...register("fullName", { required: "Name is required" })}
+                    {...register("name", { required: "Name is required" })}
                     required
                     disabled={isLoading}
                   />
