@@ -4,7 +4,7 @@ const rateLimiter = async (req, res, next) => {
     const ip = req.ip || req.header["x-forwarded-for"] || "anonymous";
 
     const redisKey = `rate:global:${ip}`;
-    const LIMIT = 5;
+    const LIMIT = 10;
     const WINDOW_SIZE_IN_SECONDS = 60;
 
     try {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { dummyResumeData } from "../assets/assets";
-import { ArrowLeft, Briefcase, ChevronLeft, ChevronRight, Download, EyeIcon, EyeOffIcon, FileText, FolderIcon, GraduationCap, Share2, SparkleIcon, User } from "lucide-react";
+import { ArrowLeft, Briefcase, ChevronLeft, ChevronRight, Download, EyeIcon, EyeOffIcon, FileText, FolderIcon, GraduationCap, Share2, SparkleIcon, User, LoaderIcon, Save, XIcon } from "lucide-react";
 import PersonalForm from "../components/PersonalForm";
 import Preview from "../components/Preview";
 import TempelateSelector from "../components/TempelateSelector";
@@ -34,6 +34,10 @@ const ResumeBuilder = () => {
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const [removeBackground, setRemoveBackground] = useState(false);
   const [mobileView, setMobileView] = useState("edit"); // "edit" or "preview"
+  const [saveModal, setSaveModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const navigate = useNavigate();
 
   const sections = [
     { id: 'personal', name: 'Personal Info', icon: User },
@@ -84,13 +88,36 @@ const ResumeBuilder = () => {
     loadExistingResume();
   }, [resumeId]);
 
-  // Persist edits to Zustand store and legacy localstorage
-  useEffect(() => {
-    if (resumeData && resumeData._id) {
-      updateResume(resumeData._id, resumeData);
-      localStorage.setItem(`resume_${resumeData._id}`, JSON.stringify(resumeData));
+  const handleSaveAndClose = async () => {
+    setIsSaving(true);
+    try {
+      if (resumeData && resumeData._id) {
+        await updateResume(resumeData._id, resumeData);
+        localStorage.setItem(`resume_${resumeData._id}`, JSON.stringify(resumeData));
+      }
+    } finally {
+      setIsSaving(false);
+      setSaveModal(false);
+      navigate("/app");
     }
-  }, [resumeData, updateResume]);
+  };
+
+  const handleDiscardAndClose = () => {
+    setSaveModal(false);
+    navigate("/app");
+  };
+
+  const handleManualSave = async () => {
+    setIsSaving(true);
+    try {
+      if (resumeData && resumeData._id) {
+        await updateResume(resumeData._id, resumeData);
+        localStorage.setItem(`resume_${resumeData._id}`, JSON.stringify(resumeData));
+      }
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const togglePublic = () => {
     setResumeData({ ...resumeData, public: !resumeData.public })
@@ -133,13 +160,13 @@ const ResumeBuilder = () => {
     <div className="relative w-full max-w-7xl mx-auto min-h-screen px-4 lg:px-6 pt-24 lg:pt-28 pb-10 text-neutral-100">
       {/* Top Header Row with Back Button & Actions */}
       <div className="flex flex-row justify-between items-center mb-6 w-full gap-4 flex-wrap print:hidden">
-        <Link
-          to="/app"
+        <button
+          onClick={() => setSaveModal(true)}
           className="flex items-center justify-center gap-1 w-fit text-neutral-400 hover:text-neutral-200 text-sm border px-3 py-1.5 rounded-md hover:border-green-500/80 transition-all ease-in-out duration-300 border-green-500/30 bg-neutral-950/50 backdrop-blur-md cursor-pointer"
         >
           <ArrowLeft className="size-5" />
           Back to dashboard
-        </Link>
+        </button>
 
         <div className="flex items-center gap-2">
           {/* Share Button */}
@@ -154,6 +181,16 @@ const ResumeBuilder = () => {
           <button onClick={togglePublic} className="flex items-center gap-1 text-sm text-violet-600 bg-linear-to-r from-violet-50 to-violet-100 px-3 py-1.5 rounded-lg hover:ring hover:ring-violet-600 cursor-pointer">
             {resumeData.public ? <EyeIcon className="size-4" /> : <EyeOffIcon className="size-4" />}
             {resumeData.public ? "Public" : "Private"}
+          </button>
+
+          {/* Save Button */}
+          <button
+            onClick={handleManualSave}
+            disabled={isSaving}
+            className="flex items-center gap-1 text-sm text-green-600 bg-linear-to-r from-green-50 to-green-100 px-3 py-1.5 rounded-lg hover:ring hover:ring-green-600 cursor-pointer"
+          >
+            {isSaving ? <LoaderIcon className="animate-spin size-4" /> : <Save className="size-4" />}
+            Save
           </button>
 
           {/* Download Button */}
@@ -237,6 +274,58 @@ const ResumeBuilder = () => {
           <Preview data={resumeData} template={resumeData.template} accentColor={resumeData.accent_color} />
         </div>
       </div>
+
+      {saveModal && (
+        <div className="fixed inset-0 h-screen w-full z-101 overflow-hidden flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => !isSaving && setSaveModal(false)}
+          />
+          <div className="relative z-102 border border-green-500/30 bg-neutral-950/80 backdrop-blur-xl px-6 py-6 w-[90%] sm:w-105 rounded-2xl flex flex-col shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-green-400">
+                Save Changes?
+              </h2>
+              <button
+                type="button"
+                onClick={() => !isSaving && setSaveModal(false)}
+                className="w-8 h-8 hover:bg-neutral-800 rounded-md cursor-pointer flex items-center justify-center text-neutral-400 border border-transparent transition"
+              >
+                <XIcon size={18} />
+              </button>
+            </div>
+            <p className="text-neutral-300 text-sm py-2 leading-relaxed">
+              Do you want to save your changes before leaving?
+            </p>
+            <div className="flex gap-3 w-full mt-4">
+              <button
+                type="button"
+                onClick={handleDiscardAndClose}
+                className="flex-1 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-sm font-semibold cursor-pointer transition shadow-lg shadow-red-600/20"
+                disabled={isSaving}
+              >
+                Discard
+              </button>
+              <button
+                type="button"
+                onClick={() => setSaveModal(false)}
+                className="flex-1 py-2 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-300 text-sm cursor-pointer transition border border-neutral-800"
+                disabled={isSaving}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveAndClose}
+                className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm font-semibold cursor-pointer transition shadow-lg shadow-green-600/20"
+                disabled={isSaving}
+              >
+                {isSaving ? <LoaderIcon className="animate-spin" size={18} /> : "Save"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,13 +1,17 @@
-import { FilePenLine, Pencil, Plus, Trash, Upload, XIcon, FolderPlus, UploadCloud, FileText } from "lucide-react";
+import { FilePenLine, Pencil, Plus, Trash, Upload, XIcon, FolderPlus, UploadCloud, FileText, LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useResumeStore } from "../store/useResumeStore";
+import { toast } from "react-toastify";
+import ResumeSkeleton from "../components/ResumeSkeleton";
 
 const Dashboard = () => {
   const navigator = useNavigate();
   const colours = ["#9333ea", "#d97706", "#dc2626", "#0284c7", "#16a34a"];
 
   const resumes = useResumeStore((state) => state.resumes);
+  const isStoreLoading = useResumeStore((state) => state.isLoading);
+  const hasFetched = useResumeStore((state) => state.hasFetched);
   const addResume = useResumeStore((state) => state.addResume);
   const deleteResume = useResumeStore((state) => state.deleteResume);
   const renameResume = useResumeStore((state) => state.renameResume);
@@ -38,18 +42,20 @@ const Dashboard = () => {
   const [title, setTitle] = useState("");
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null, title: "" });
   const [renameModal, setRenameModal] = useState({ isOpen: false, id: null, title: "" });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchResumes = useResumeStore((state) => state.fetchResumes);
 
   useEffect(() => {
     document.title = "resuCraft | Dashboard";
-  }, []);
+    fetchResumes();
+  }, [fetchResumes]);
 
-  const handleCreateResume = (e) => {
+  const handleCreateResume = async (e) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    const newId = crypto.randomUUID();
     const newResume = {
-      _id: newId,
       title: title.trim(),
       personal_info: {
         full_name: "",
@@ -69,14 +75,28 @@ const Dashboard = () => {
       template: "classic",
       accent_color: "#3b82f6",
       public: false,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
     };
+    setIsLoading(true);
 
-    addResume(newResume);
-    setIsCreateResume(false);
-    setTitle("");
-    navigator("/app/builder/" + newId);
+    try {
+      const created = await addResume(newResume);
+      
+      if (created && created.error) {
+        toast.error(created.error);
+        return;
+      }
+      
+      if (created && (created._id || created.id)) {
+        setIsCreateResume(false);
+        setTitle("");
+        toast.success("Resume created successfully.");
+        navigator("/app/builder/" + (created._id || created.id));
+      }
+    } catch (err) {
+      toast.error(err.message || "An unexpected error occurred.");
+    }finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDeleteClick = (e, id, title) => {
@@ -85,10 +105,13 @@ const Dashboard = () => {
   };
 
   const handleConfirmDelete = () => {
+    setIsLoading(true);
     if (deleteModal.id) {
       deleteResume(deleteModal.id);
+      toast.success("Resume deleted successfully.");
     }
     setDeleteModal({ isOpen: false, id: null, title: "" });
+    setIsLoading(false);
   };
 
   const handleRenameClick = (e, id, title) => {
@@ -193,9 +216,10 @@ const Dashboard = () => {
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 rounded-xl bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-neutral-950 font-bold text-sm cursor-pointer transition shadow-lg shadow-green-500/10 hover:shadow-green-500/20 active:scale-[0.98]"
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-neutral-950 font-bold text-sm cursor-pointer transition shadow-lg shadow-green-500/10 hover:shadow-green-500/20 active:scale-[0.98]"
+                disabled={isLoading}
               >
-                Create
+                {isLoading ? <LoaderIcon className="animate-spin" size={18} /> : "Create"}
               </button>
             </div>
           </form>
@@ -306,8 +330,9 @@ const Dashboard = () => {
                 type="button"
                 onClick={handleConfirmDelete}
                 className="flex-1 py-2 rounded-lg bg-red-600 hover:bg-red-500 text-white text-sm font-semibold cursor-pointer transition shadow-lg shadow-red-600/20"
+                disabled={isLoading}
               >
-                Delete
+                {isLoading ? <LoaderIcon className="animate-spin" size={18} /> : "Delete"}
               </button>
             </div>
           </div>
@@ -365,58 +390,78 @@ const Dashboard = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {resumes.map((d, index) => {
-          const baseColour = colours[index % colours.length];
-          const completeness = calculateCompleteness(d);
-          return (
-            <div
-              key={d._id}
-              onClick={() => { navigator("/app/builder/" + d._id) }}
-              className="p-5 rounded-2xl border border-neutral-900 bg-neutral-900/30 hover:border-neutral-800/80 transition-all duration-300 flex flex-col justify-between h-44 relative group cursor-pointer shadow-md select-none hover:bg-neutral-900/50"
-            >
-              {/* Top Row: Initials Badge + Completeness */}
-              <div className="flex justify-between items-center w-full">
-                <div
-                  className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-mono font-bold"
-                  style={{ backgroundColor: `${baseColour}20`, color: baseColour }}
-                >
-                  {getInitials(d.title)}
-                </div>
-                <span className="text-[10px] text-green-400 font-mono bg-green-950/40 border border-green-800/40 px-2 py-0.5 rounded font-bold">
-                  {completeness}%
-                </span>
-              </div>
-
-              {/* Title and Date */}
-              <div className="mt-4 flex-1">
-                <h3 className="text-sm font-semibold text-neutral-200 group-hover:text-green-400 transition-colors duration-200">
-                  {d.title}
-                </h3>
-                <p className="text-[10px] text-neutral-500 mt-1 font-mono">
-                  Updated {new Date(d.updatedAt || d.createdAt || new Date()).toLocaleDateString()}
-                </p>
-              </div>
-
-              {/* Hover Actions (Rename / Delete) */}
-              <div className="absolute right-4 bottom-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <button
-                  onClick={(e) => handleRenameClick(e, d._id, d.title)}
-                  className="p-1.5 bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 text-neutral-400 hover:text-green-400 rounded-lg transition-colors cursor-pointer animate-none"
-                  title="Rename"
-                >
-                  <Pencil size={13} />
-                </button>
-                <button
-                  onClick={(e) => handleDeleteClick(e, d._id, d.title)}
-                  className="p-1.5 bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 text-neutral-400 hover:text-red-400 rounded-lg transition-colors cursor-pointer animate-none"
-                  title="Delete"
-                >
-                  <Trash size={13} />
-                </button>
-              </div>
+        {isStoreLoading && !hasFetched ? (
+          Array.from({ length: 4 }).map((_, idx) => <ResumeSkeleton key={idx} />)
+        ) : resumes.length === 0 && hasFetched ? (
+          <div className="col-span-full py-16 flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 bg-neutral-900/50 rounded-full flex items-center justify-center mb-4 text-neutral-500 border border-neutral-800/60 shadow-inner">
+              <FileText size={28} />
             </div>
-          );
-        })}
+            <h3 className="text-xl font-bold text-neutral-200 mb-2 tracking-tight">No resumes found</h3>
+            <p className="text-neutral-500 mb-6 max-w-sm text-sm">
+              You haven't created any resumes yet. Start by creating a new one or upload an existing draft.
+            </p>
+            <button
+              onClick={() => setIsCreateResume(true)}
+              className="bg-green-600 hover:bg-green-500 text-white px-6 py-2.5 rounded-lg font-medium transition cursor-pointer shadow-lg shadow-green-600/20 active:scale-[0.98] text-sm"
+            >
+              Create your first resume
+            </button>
+          </div>
+        ) : (
+          resumes.map((d, index) => {
+            const baseColour = colours[index % colours.length];
+            const completeness = calculateCompleteness(d);
+            return (
+              <div
+                key={d._id}
+                onClick={() => { navigator("/app/builder/" + d._id) }}
+                className="p-5 rounded-2xl border border-neutral-900 bg-neutral-900/30 hover:border-neutral-800/80 transition-all duration-300 flex flex-col justify-between h-44 relative group cursor-pointer shadow-md select-none hover:bg-neutral-900/50"
+              >
+                {/* Top Row: Initials Badge + Completeness */}
+                <div className="flex justify-between items-center w-full">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center text-xs font-mono font-bold"
+                    style={{ backgroundColor: `${baseColour}20`, color: baseColour }}
+                  >
+                    {getInitials(d.title)}
+                  </div>
+                  <span className="text-[10px] text-green-400 font-mono bg-green-950/40 border border-green-800/40 px-2 py-0.5 rounded font-bold">
+                    {completeness}%
+                  </span>
+                </div>
+
+                {/* Title and Date */}
+                <div className="mt-4 flex-1">
+                  <h3 className="text-sm font-semibold text-neutral-200 group-hover:text-green-400 transition-colors duration-200">
+                    {d.title}
+                  </h3>
+                  <p className="text-[10px] text-neutral-500 mt-1 font-mono">
+                    Updated {new Date(d.updatedAt || d.createdAt || new Date()).toLocaleDateString()}
+                  </p>
+                </div>
+
+                {/* Hover Actions (Rename / Delete) */}
+                <div className="absolute right-4 bottom-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    onClick={(e) => handleRenameClick(e, d._id, d.title)}
+                    className="p-1.5 bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 text-neutral-400 hover:text-green-400 rounded-lg transition-colors cursor-pointer animate-none"
+                    title="Rename"
+                  >
+                    <Pencil size={13} />
+                  </button>
+                  <button
+                    onClick={(e) => handleDeleteClick(e, d._id, d.title)}
+                    className="p-1.5 bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 text-neutral-400 hover:text-red-400 rounded-lg transition-colors cursor-pointer animate-none"
+                    title="Delete"
+                  >
+                    <Trash size={13} />
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import prisma from "../config/prisma.js";
 export const createResume = async (req, res) => {
     try {
         const { title, content } = req.body;
-        
+
         const newResume = await prisma.resume.create({
             data: {
                 title: title || "Untitled Resume",
@@ -38,7 +38,7 @@ export const getResumeById = async (req, res) => {
         const { id } = req.params;
 
         const resume = await prisma.resume.findFirst({
-            where: { 
+            where: {
                 id,
                 userId: req.user.id
             }
